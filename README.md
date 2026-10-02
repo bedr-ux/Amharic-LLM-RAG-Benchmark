@@ -82,9 +82,19 @@ A GPU (e.g. Colab T4) is recommended; Tiny Aya Earth needs `bitsandbytes` for 4-
 
 ## Citation / data
 
-Dataset: `dagim/amharic-qa` (AmQA, Abedissa et al., 2023), please check its license before reuse. If you use this work, cite this repository.
+Dataset: `dagim/amharic-qa` @inproceedings{taffa-etal-2024-low,
+  title     = {Low Resource Question Answering: An {A}mharic Benchmarking Dataset},
+  author    = {Taffa, Tilahun Abedissa and Usbeck, Ricardo and Assabie, Yaregal},
+  booktitle = {Proceedings of the Fifth Workshop on Resources for African Indigenous Languages @ LREC-COLING 2024},
+  month     = may,
+  year      = {2024},
+  address   = {Torino, Italia},
+  publisher = {ELRA and ICCL},
+  pages     = {124--132},
+  url       = {https://aclanthology.org/2024.rail-1.14}
+}, please check its license before reuse. If you use this work, cite this repository.
 
-Author: Bedru Yimam Ahmed (Wollo University, Kombolcha Institute of Technology)
+Author: Bedru Yimam Ahmed (Wollo University, Kombolcha Institute of Technology), bedruy4@gamil.com
 
 ## License
 
