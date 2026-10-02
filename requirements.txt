@@ -1,0 +1,16 @@
+transformers
+datasets
+sentence-transformers
+faiss-cpu
+rank-bm25
+bitsandbytes
+rouge-score
+sacrebleu
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+tqdm
+accelerate
+torch

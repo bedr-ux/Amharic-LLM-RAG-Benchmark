@@ -1,0 +1,9 @@
+﻿Experimental Condition,Exact Match,Token F1,ROUGE-1,ROUGE-L,SacreBLEU,Token F1 p-val,Significance
+Qwen-0.5B - No RAG,0.0,0.0063,0.0,0.0,0.1709,-,Baseline
+Qwen-0.5B - Dense RAG,0.0,0.0289,0.02,0.02,0.7562,1.079e-01,n.s.
+Qwen-0.5B - BM25 RAG,0.0,0.039,0.045,0.045,1.2704,6.399e-02,n.s.
+Qwen-0.5B - Hybrid RAG (RRF),0.0,0.0318,0.025,0.025,0.926,1.038e-01,n.s.
+Tiny Aya Earth - No RAG,0.0,0.0261,0.0071,0.0071,0.5439,5.326e-02,n.s.
+Tiny Aya Earth - Hybrid RAG,0.0,0.1443,0.056,0.056,3.7172,8.871e-07,***
+Amharic Spec - No RAG,0.0,0.0051,0.0,0.0,0.0698,8.280e-01,n.s.
+Amharic Spec - Hybrid RAG,0.0,0.0036,0.0196,0.0196,0.0706,6.030e-01,n.s.
