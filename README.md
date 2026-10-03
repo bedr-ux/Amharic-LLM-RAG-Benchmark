@@ -8,7 +8,7 @@ A small, fully reproducible study of whether retrieval-augmented generation (RAG
 
 ![Results](figures/amharic_rag_enhanced_evaluation.png)
 
-*Left: Qwen2.5-0.5B token F1 by retrieval mode. Middle: each generator without RAG vs. with hybrid RAG. Right: per-question token F1 for Qwen under each condition; most points sit at 0 in every condition.*
+*Left: Qwen2.5-0.5B token F1 by retrieval mode. Middle: token F1 for all three generators under all four conditions. Right: per-question token F1 for Qwen under each condition; most points sit at 0 in every condition.*
 
 ## Setup
 
@@ -40,52 +40,55 @@ BM25 is by far the strongest retriever here. The dense encoder is weak on Amhari
 
 ### 2. End-to-end generation (100 questions, mean token F1)
 
-| Model | No RAG | Dense | BM25 | Hybrid | Δ (Hybrid − No RAG) |
+| Model | No RAG | Dense | BM25 | Hybrid | Δ (best RAG − No RAG) |
 |---|---|---|---|---|---|
-| Qwen2.5-0.5B | 0.008 | 0.018 | **0.039** | 0.032 | +0.024 |
-| **Tiny Aya Earth 3.35B** | 0.038 | not scored | not scored | **0.151** | **+0.113** (about 4x) |
-| Amharic-LLaMA 0.4B | 0.005 | not scored | not scored | 0.007 | +0.002 |
+| Qwen2.5-0.5B | 0.008 | 0.018 | **0.039** | 0.032 | +0.032 (BM25) |
+| **Tiny Aya Earth 3.35B** | 0.038 | 0.067 | **0.191** | 0.151 | **+0.153 (BM25), about 5x** |
+| Amharic-LLaMA 0.4B | 0.005 | 0.005 | **0.010** | 0.007 | +0.005 (BM25) |
 
 Exact Match is 0.0 in every condition.
 
 <details>
 <summary>All metrics (means over 100 questions)</summary>
 
-| Condition | EM | Token F1 | ROUGE-1 | ROUGE-L | SacreBLEU | Token F1 p-value vs. Qwen No-RAG |
+| Condition | EM | Token F1 | ROUGE-1 | ROUGE-L | SacreBLEU | Token F1 p-value vs. own No-RAG |
 |---|---|---|---|---|---|---|
 | Qwen-0.5B, No RAG | 0.0 | 0.0078 | 0.0000 | 0.0000 | 0.27 | baseline |
 | Qwen-0.5B, Dense | 0.0 | 0.0179 | 0.0080 | 0.0080 | 0.45 | 9.4e-2 (n.s.) |
 | Qwen-0.5B, BM25 | 0.0 | 0.0394 | 0.0493 | 0.0493 | 1.26 | 3.7e-3 (**) |
 | Qwen-0.5B, Hybrid | 0.0 | 0.0316 | 0.0400 | 0.0400 | 0.80 | 1.5e-2 (*) |
-| Tiny Aya Earth, No RAG | 0.0 | 0.0377 | 0.0029 | 0.0029 | 0.89 | 8.8e-5 (***) † |
-| Tiny Aya Earth, Hybrid | 0.0 | 0.1506 | 0.1144 | 0.1144 | 5.12 | 9.9e-14 (***) † |
-| Amharic-LLaMA, No RAG | 0.0 | 0.0054 | 0.0017 | 0.0017 | 0.08 | 4.7e-1 (n.s.) † |
-| Amharic-LLaMA, Hybrid | 0.0 | 0.0069 | 0.0079 | 0.0079 | 0.14 | 8.0e-1 (n.s.) † |
+| Tiny Aya Earth, No RAG | 0.0 | 0.0377 | 0.0029 | 0.0029 | 0.89 | baseline |
+| Tiny Aya Earth, Dense | 0.0 | 0.0669 | 0.0380 | 0.0380 | 1.94 | 1.6e-2 (*) |
+| Tiny Aya Earth, BM25 | 0.0 | 0.1911 | 0.1383 | 0.1383 | 6.93 | 4.3e-15 (***) |
+| Tiny Aya Earth, Hybrid | 0.0 | 0.1506 | 0.1144 | 0.1144 | 5.12 | 7.0e-10 (***) |
+| Amharic-LLaMA, No RAG | 0.0 | 0.0054 | 0.0017 | 0.0017 | 0.08 | baseline |
+| Amharic-LLaMA, Dense | 0.0 | 0.0050 | 0.0050 | 0.0050 | 0.12 | 8.7e-1 (n.s.) |
+| Amharic-LLaMA, BM25 | 0.0 | 0.0102 | 0.0047 | 0.0047 | 0.29 | 4.4e-2 (*) |
+| Amharic-LLaMA, Hybrid | 0.0 | 0.0069 | 0.0079 | 0.0079 | 0.14 | 5.5e-1 (n.s.) |
 
-† Cross-model comparison against Qwen's No-RAG scores on the same questions. It shows the model differs from Qwen's baseline, not that RAG helped that model. See the note on p-values below.
+p-values are paired t-tests on per-question token F1, each condition against the same model's No-RAG condition, uncorrected for multiple comparisons. `amharic_rag_enhanced_metrics_summary.csv` also has a column with p-values against *Qwen's* No-RAG baseline; for Tiny Aya and Amharic-LLaMA that column compares across models and does not measure the RAG effect.
 
 </details>
 
 **What the data supports**
 
-- **Retrieval quality is the clearest finding:** BM25 ≫ hybrid ≫ dense on the 60-question retrieval set.
-- **Tiny Aya Earth benefits most from RAG.** Mean token F1 rises from 0.038 to 0.151 (about 4x), ROUGE-1 from 0.003 to 0.114, SacreBLEU from 0.9 to 5.1. It is also the strongest generator without retrieval (0.038 vs. 0.008 for Qwen, paired p = 8.8e-5 on the same questions). A within-model significance test for its RAG gain was not run in this notebook.
-- **Qwen2.5-0.5B improves with every retrieval mode, but from a very low base.** Against its own No-RAG baseline: BM25 +0.032 (p = 0.004), hybrid +0.024 (p = 0.015), dense +0.010 (p = 0.094, n.s.). With 7 comparisons in the table, a Bonferroni threshold is 0.05 / 7 ≈ 0.007: BM25 clears it, hybrid does not. The ordering BM25 > hybrid > dense matches the retrieval ranking, which is suggestive, but the three RAG modes were not tested against each other. Even with the best retriever, mean F1 stays below 0.04.
-- **The Amharic-native 0.4B model shows no measurable benefit** from RAG (+0.002 F1, n.s.). The cause was not diagnosed here; inspect `amharic_rag_enhanced_detailed_predictions.csv` for the raw outputs.
+- **Retrieval quality is the clearest finding:** BM25 ≫ hybrid ≫ dense on the 60-question retrieval set (Recall@3 of 0.90 / 0.58 / 0.12, and the generator sees the top 3 passages).
+- **Generation follows the same ordering for all three models:** BM25 gives the highest token F1, then hybrid, then dense (Amharic-LLaMA's dense score is marginally below its No-RAG score). This is consistent with retrieval quality driving downstream quality, but with three retrievers and one sample it is suggestive, not established; the RAG modes were not tested against each other.
+- **Tiny Aya Earth benefits most from RAG.** With BM25 its mean token F1 rises from 0.038 to 0.191 (about 5x), with hybrid to 0.151 (about 4x), and SacreBLEU from 0.9 to 6.9. Both gains are highly significant against its own baseline (p < 1e-9) and survive a Bonferroni correction. Dense gives a smaller gain (+0.029, p = 0.016) that does not survive it. Tiny Aya is also the strongest generator without retrieval (0.038 vs. 0.008 for Qwen).
+- **Qwen2.5-0.5B improves with every retrieval mode, but from a very low base.** BM25 (+0.032, p = 0.004) is significant at a Bonferroni threshold of 0.05 / 9 ≈ 0.0056; hybrid (+0.024, p = 0.015) and dense (+0.010, p = 0.094) are not. Even with the best retriever, mean F1 stays below 0.04.
+- **The Amharic-native 0.4B model shows no practically meaningful benefit.** Its best condition (BM25, +0.005 F1, p = 0.044) is nominally significant but does not survive correction, and the absolute score is about 0.01. The cause was not diagnosed here; inspect `amharic_rag_enhanced_detailed_predictions.csv` for the raw outputs.
 
 **Qualitative examples.** The notebook prints the three questions where Qwen's hybrid-RAG F1 improved most over its no-RAG answer (best cases, not a random sample). In all three Qwen copies the right span from the context ("15 ወራት", "17 ዓመታት", "450 ሚሊዮን") but pads it with stray or code-switched tokens (e.g. "Worcekta", "StreamReader"), while its no-RAG answers are degenerate repetition ("እና እና እና …"). Tiny Aya returns a fluent full sentence containing the right number, but with morphological variants of the gold answer (ዓመት vs. ዓመታት), Markdown bold, and extra clauses, all of which token F1 penalizes.
-
-**Note on p-values.** `amharic_rag_enhanced_metrics_summary.csv` reports every p-value (paired t-test on token F1) against the *Qwen No-RAG* baseline. That is a valid RAG-effect test only for the Qwen rows. For Tiny Aya and Amharic-LLaMA it compares across models.
 
 ## Limitations
 
 - **Small n.** 100 generation questions and 60 retrieval questions; most per-question F1 values are 0 (right panel of the figure), so means are driven by a minority of items. The paired t-test assumes roughly normal differences, which zero-inflated F1 does not satisfy; a Wilcoxon test or bootstrap CI would be more appropriate.
+- **Multiple comparisons.** The 9 RAG-vs-No-RAG tests are reported uncorrected; the Bonferroni threshold (about 0.0056) is applied only in the discussion above.
 - **Closed-world knowledge base.** The 374 passages are the gold contexts of the dataset's own QA pairs (about 7 questions per passage), so the gold passage is always in the corpus. Real-world retrieval would be harder.
 - **Metric fit.** Gold answers are very short (about 2.8 tokens), and token F1 penalizes Ethiopic numerals vs. Arabic numerals (e.g. ፲፱፻፳፬ vs 1924) and morphological variants. EM = 0 everywhere. Human or LLM-judge evaluation would be more informative.
 - **ROUGE is nearly uninformative on Amharic as run.** The default `rouge_score` tokenizer lowercases and keeps only `[a-z0-9]`, so Ethiopic characters are discarded and only Latin or digit tokens (such as "15" or "450") can match. This is consistent with ROUGE-1 and ROUGE-L being identical in every row. Token F1 and SacreBLEU are the more reliable text metrics; a custom tokenizer is needed for meaningful ROUGE.
 - **Retrieval-eval matching** counts a hit if the gold passage is contained in a candidate (or vice versa) or the first 40 characters match, which is lenient.
 - **Generation quirks.** Several outputs contain degenerate repetition, stray tokens, or trailing garbage; no post-processing or answer extraction is applied. `max_new_tokens=60` truncates long outputs.
-- **Partial scoring.** Dense and BM25 predictions were generated for Tiny Aya Earth and Amharic-LLaMA, but only their No-RAG and hybrid conditions were scored.
 - **Different sample sizes** for retrieval (60) and generation (100) evaluation, one seed (42), no repeated runs.
 - Tiny Aya was run in 4-bit; Qwen and Amharic-LLaMA in fp16.
 - Not tested: dense encoders with real Amharic support, weighted fusion, reranking, larger k, other prompts.
@@ -93,19 +96,20 @@ Exact Match is 0.0 in every condition.
 ## Repository layout
 
 ```
-notebooks/amharic_rag_enhanced_study.ipynb   full pipeline (Colab T4 compatible)
+notebooks/Amharic_LLM_RAG_Benchmark.ipynb    full pipeline (Colab T4 compatible)
 results/
   amharic_retrieval_paradigms_summary.csv    Recall@k / MRR
-  amharic_rag_enhanced_metrics_summary.csv   generation metrics (p-values vs Qwen No-RAG)
+  amharic_rag_enhanced_metrics_summary.csv   generation metrics (p-values vs Qwen No-RAG and vs own No-RAG)
   amharic_rag_enhanced_detailed_predictions.csv  all model outputs per question
-figures/amharic_rag_evaluation.png
+  per_sample_token_f1.csv                    per-question token F1 for every condition
+figures/amharic_rag_enhanced_evaluation.png
 ```
 
 ## Reproduce
 
 ```bash
 pip install -r requirements.txt
-jupyter notebook notebooks/amharic_rag_enhanced_study.ipynb
+jupyter notebook notebooks/Amharic_LLM_RAG_Benchmark.ipynb
 ```
 A GPU (e.g. Colab T4) is recommended; Tiny Aya Earth needs `bitsandbytes` for 4-bit loading and a Hugging Face token.
 

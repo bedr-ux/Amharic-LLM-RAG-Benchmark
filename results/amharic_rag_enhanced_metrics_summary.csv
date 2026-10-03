@@ -1,9 +1,13 @@
-﻿Experimental Condition,Exact Match,Token F1,ROUGE-1,ROUGE-L,SacreBLEU,Token F1 p-val,Significance
-Qwen-0.5B - No RAG,0.0,0.0078,0.0,0.0,0.2693,-,Baseline
-Qwen-0.5B - Dense RAG,0.0,0.0179,0.008,0.008,0.4477,9.426e-02,n.s.
-Qwen-0.5B - BM25 RAG,0.0,0.0394,0.0493,0.0493,1.2612,3.736e-03,**
-Qwen-0.5B - Hybrid RAG (RRF),0.0,0.0316,0.04,0.04,0.8001,1.500e-02,*
-Tiny Aya Earth - No RAG,0.0,0.0377,0.0029,0.0029,0.8863,8.829e-05,***
-Tiny Aya Earth - Hybrid RAG,0.0,0.1506,0.1144,0.1144,5.1185,9.883e-14,***
-Amharic Spec - No RAG,0.0,0.0054,0.0017,0.0017,0.0822,4.748e-01,n.s.
-Amharic Spec - Hybrid RAG,0.0,0.0069,0.0079,0.0079,0.1408,8.039e-01,n.s.
+﻿Experimental Condition,Exact Match,Token F1,ROUGE-1,ROUGE-L,SacreBLEU,Token F1 p-val,Significance,p-val vs own No-RAG,Sig (own)
+Qwen-0.5B - No RAG,0.0,0.0078,0.0,0.0,0.2693,-,Baseline,-,Baseline
+Qwen-0.5B - Dense RAG,0.0,0.0179,0.008,0.008,0.4477,9.426e-02,n.s.,9.426e-02,n.s.
+Qwen-0.5B - BM25 RAG,0.0,0.0394,0.0493,0.0493,1.2612,3.736e-03,**,3.736e-03,**
+Qwen-0.5B - Hybrid RAG (RRF),0.0,0.0316,0.04,0.04,0.8001,1.500e-02,*,1.500e-02,*
+Tiny Aya Earth - No RAG,0.0,0.0377,0.0029,0.0029,0.8863,8.829e-05,***,-,Baseline
+Tiny Aya Earth - Dense RAG,0.0,0.0669,0.038,0.038,1.9447,3.565e-05,***,1.595e-02,*
+Tiny Aya Earth - BM25 RAG,0.0,0.1911,0.1383,0.1383,6.9343,5.646e-19,***,4.326e-15,***
+Tiny Aya Earth - Hybrid RAG,0.0,0.1506,0.1144,0.1144,5.1185,9.883e-14,***,7.026e-10,***
+Amharic Spec - No RAG,0.0,0.0054,0.0017,0.0017,0.0822,4.748e-01,n.s.,-,Baseline
+Amharic Spec - Dense RAG,0.0,0.005,0.005,0.005,0.1215,4.230e-01,n.s.,8.711e-01,n.s.
+Amharic Spec - BM25 RAG,0.0,0.0102,0.0047,0.0047,0.2898,5.203e-01,n.s.,4.394e-02,*
+Amharic Spec - Hybrid RAG,0.0,0.0069,0.0079,0.0079,0.1408,8.039e-01,n.s.,5.495e-01,n.s.
