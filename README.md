@@ -6,7 +6,7 @@ A small, fully reproducible study of whether retrieval-augmented generation (RAG
 
 > **Scope note.** This is a pilot-scale study (100 generation questions, 60 retrieval questions, single seed). Treat the numbers as indicative, not conclusive. See [Limitations](#limitations).
 
-![Results](figures/amharic_rag_evaluation.png)
+![Results](figures/amharic_rag_enhanced_evaluation.png)
 
 *Left: Qwen2.5-0.5B token F1 by retrieval mode. Middle: each generator without RAG vs. with hybrid RAG. Right: per-question token F1 for Qwen under each condition; most points sit at 0 in every condition.*
 
